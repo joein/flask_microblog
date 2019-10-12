@@ -3,8 +3,8 @@ from flask import jsonify, request, url_for
 from app import db
 from app.api import bp
 from app.models import User
-from app.api.auth import  token_auth
-from app.api.errors  import bad_request
+from app.api.auth import token_auth
+from app.api.errors import bad_request
 
 
 @bp.route('/users/<int:id>', methods=['GET'])
@@ -65,8 +65,9 @@ def create_user():
 @token_auth.login_required
 def update_user(id):
     user = User.query.get_or_404(id)
-    data =  request.get_json() or {}
-    if 'username' in data and data['username'] != user.username and User.query.filter_by(username=data['username']).first():
+    data = request.get_json() or {}
+    if 'username' in data and data['username'] != user.username and User.query.filter_by(
+            username=data['username']).first():
         return bad_request('please use a different username')
     if 'email' in data and data['email'] != user.email and User.query.filter_by(email=data['email']).first():
         return bad_request('please use a different email address')
