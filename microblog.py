@@ -1,7 +1,6 @@
 from app import create_app, db, cli
 from app.models import User, Post, Notification, Message, Task
 
-
 app = create_app()
 cli.register(app)
 

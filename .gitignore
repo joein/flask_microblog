@@ -4,3 +4,4 @@ venv/
 *.db
 .idea/
 *.log
+*_docker.sh

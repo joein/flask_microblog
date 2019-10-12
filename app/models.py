@@ -1,6 +1,6 @@
-import  os
+import os
 import json
-import base64 
+import base64
 
 from time import time
 from hashlib import md5
@@ -159,10 +159,6 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         db.session.add(n)
         return n
 
-    @login.user_loader
-    def load_user(id):
-        return User.query.get(int(id))
-
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
@@ -227,6 +223,11 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
 
     def get_task_in_progress(self, name):
         return Task.query.filter_by(name=name, user=self, complete=False).first()
+
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class Post(SearchableMixin, db.Model):

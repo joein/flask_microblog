@@ -9,7 +9,6 @@ from app import create_app, db
 from app.models import Task, User, Post
 from app.email import send_email
 
-
 app = create_app()
 app.app_context().push()
 
@@ -49,11 +48,11 @@ def export_posts(user_id):
         total_posts = _user.posts.count()
         for post in _user.posts.order_by(Post.timestamp.asc()):
             data.append({'body': post.body, 'timestamp': post.timestamp.isoformat() + 'Z'})
-            time.sleep(5)  #  only for increase time of execution to see progressbar on site
+            time.sleep(5)  # only for increase time of execution to see progressbar on site
             i += 1
             _set_task_progress(100 * i // total_posts)
-        send_email('[Microblog] Your blog posts', 
-                   sender=app.config['ADMINS'][0], recipients=[_user.email], 
+        send_email('[Microblog] Your blog posts',
+                   sender=app.config['ADMINS'][0], recipients=[_user.email],
                    text_body=render_template('email/export_posts.txt', user=_user),
                    html_body=render_template('email/export_posts.html', user=_user),
                    attachments=[('posts.json', 'application/json', json.dumps({'posts': data}, indent=4))],
